@@ -32,26 +32,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Users {
-  final int userId;
-  final int id;
-  final String title;
-
-  Users({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
-
-  factory Users.fromJson(Map<String, dynamic> json) {
-    return Users(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -71,23 +51,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future login() async {
-    final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Users user = Users.fromJson(jsonDecode(response.body));
-      print(user.title);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -136,5 +99,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
       , // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class Users {
+  final int userId;
+  final int id;
+  final String title;
+
+  Users({
+    required this.userId,
+    required this.id,
+    required this.title,
+  });
+
+  factory Users.fromJson(Map<String, dynamic> json) {
+    return Users(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
+
+Future login() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+
+    Users user = Users.fromJson(jsonDecode(response.body));
+
+//LogitCode Here
+
+    print(user.title);
+
+    ////
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load');
   }
 }
