@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Login Page'),
+      home: const MyHomePage(title: 'Login Page'),
     );
   }
 }
