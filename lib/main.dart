@@ -59,6 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    final TextEditingController _usernametext = TextEditingController();
+    final TextEditingController _userpasswordtext = TextEditingController();
+    final TextEditingController _usermobiletext = TextEditingController();
+    final TextEditingController _useraddresstext = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the valuhttps://github.com/carrentalps/APILogin.gite from the MyHomePage object that was created by
@@ -69,27 +74,58 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 100,
+            height: 5,
           ),
-          const TextField(
+          TextField(
+            controller: _usernametext,
             obscureText: false,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'User Name',
             ),
           ),
-          const TextField(
+          const SizedBox(
+            height: 5,
+          ),
+          TextField(
+            controller: _userpasswordtext,
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Password',
             ),
           ),
+          const SizedBox(
+            height: 5,
+          ),
+          TextField(
+            controller: _usermobiletext,
+            obscureText: false,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Mobile No.',
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          TextField(
+            controller: _useraddresstext,
+            obscureText: false,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Address',
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
           SizedBox(
             child: TextButton(
-                child: const Text('Login', style: TextStyle(fontSize: 38)),
+                child: const Text('Register', style: TextStyle(fontSize: 38)),
                 onPressed: () {
-                  login();
+                  registeruser(_usernametext.text, _userpasswordtext.text,
+                      _usermobiletext.text, _useraddresstext.text);
                 }),
           )
         ],
@@ -136,6 +172,32 @@ Future login() async {
 
     print(user.title);
 
+    ////
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load');
+  }
+}
+
+Future registeruser(String userName, String userPassword, String userMobile,
+    String userAddress) async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+
+    Users user = Users.fromJson(jsonDecode(response.body));
+
+//LogitCode Here
+
+    print(user.title);
+    print(userName);
+    print(userPassword);
+    print(userMobile);
+    print(userAddress);
     ////
   } else {
     // If the server did not return a 200 OK response,
