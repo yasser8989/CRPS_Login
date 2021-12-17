@@ -183,7 +183,7 @@ Future login() async {
 Future registeruser(String userName, String userPassword, String userMobile,
     String userAddress) async {
   final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+      .get(Uri.parse('https://crp-stg.khaledez.net/users'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
