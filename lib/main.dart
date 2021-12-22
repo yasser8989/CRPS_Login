@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -124,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: TextButton(
                 child: const Text('Register', style: TextStyle(fontSize: 38)),
                 onPressed: () {
+                  //  print('hi');
                   registeruser(_usernametext.text, _userpasswordtext.text,
                       _usermobiletext.text, _useraddresstext.text);
                 }),
@@ -139,28 +140,34 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Users {
-  final int userId;
+  final int username;
   final int id;
-  final String title;
+  final String password;
+  final String phone;
+  final String address;
 
   Users({
-    required this.userId,
+    required this.username,
     required this.id,
-    required this.title,
+    required this.address,
+    required this.password,
+    required this.phone,
   });
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
-      userId: json['userId'],
+      username: json['username'],
+      password: json['password'],
+      phone: json['phone'],
+      address: json['address'],
       id: json['id'],
-      title: json['title'],
     );
   }
 }
 
-Future login() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+/* Future login() async {
+  final response =
+      await http.get(Uri.parse('https://crp-stg.khaledez.net/users'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -168,40 +175,29 @@ Future login() async {
 
     Users user = Users.fromJson(jsonDecode(response.body));
 
-//LogitCode Here
-
-    print(user.title);
-
-    ////
+    print('hhh');
+    print(user.username);
+    print(user.id);
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
+// If the server did not return a 200 OK response,
+    //then throw an exception.
     throw Exception('Failed to load');
   }
 }
-
+ */
 Future registeruser(String userName, String userPassword, String userMobile,
     String userAddress) async {
-  final response = await http
-      .get(Uri.parse('https://crp-stg.khaledez.net/users'));
+  var Data = {
+    'name': userName,
+    'password': userPassword,
+    'phone': userMobile,
+    'address': userAddress,
+  };
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-
-    Users user = Users.fromJson(jsonDecode(response.body));
-
-//LogitCode Here
-
-    print(user.title);
-    print(userName);
-    print(userPassword);
-    print(userMobile);
-    print(userAddress);
-    ////
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load');
-  }
+  var dio = Dio();
+  var response = await dio.post(
+    'https://hook.integromat.com/oqgjvc2r74ckq6ddx4grvxetfq5fiqm7',
+    data: Data,
+  );
+  print('Done');
 }
