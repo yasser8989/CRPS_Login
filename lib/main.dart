@@ -199,5 +199,6 @@ Future registeruser(String userName, String userPassword, String userMobile,
     'https://hook.integromat.com/oqgjvc2r74ckq6ddx4grvxetfq5fiqm7',
     data: Data,
   );
-  print('Done');
+
+  print(response.data);
 }
