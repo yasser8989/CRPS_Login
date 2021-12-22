@@ -125,8 +125,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text('Register', style: TextStyle(fontSize: 38)),
                 onPressed: () {
                   //  print('hi');
-                  registeruser(_usernametext.text, _userpasswordtext.text,
-                      _usermobiletext.text, _useraddresstext.text);
+
+                  var data = {
+                    'name': _usernametext.text,
+                    'password': _userpasswordtext.text,
+                    'phone': _usermobiletext.text,
+                    'address': _useraddresstext.text,
+                  };
+
+                  print(getApiData(
+                      'https://hook.integromat.com/oqgjvc2r74ckq6ddx4grvxetfq5fiqm7',
+                      data));
                 }),
           )
         ],
@@ -201,4 +210,14 @@ Future registeruser(String userName, String userPassword, String userMobile,
   );
 
   print(response.data);
+}
+
+Future getApiData(String path, Map<String, dynamic> Data) async {
+  var dio = Dio();
+  var response = await dio.post(
+    path,
+    data: Data,
+  );
+
+  return response.data;
 }
