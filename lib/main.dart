@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
-import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +52,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var newuserdata =
+      User(username: 'x', address: 'x', password: 'x', phone: 'x');
+  late Future futureuser = registeruser(newuserdata);
+
   @override
+  void initState() {
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -126,17 +135,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   //  print('hi');
 
-                  var data = {
-                    'name': _usernametext.text,
-                    'password': _userpasswordtext.text,
-                    'phone': _usermobiletext.text,
-                    'address': _useraddresstext.text,
-                  };
+                  var newuserdata = User(
+                      username: _usernametext.text,
+                      address: _useraddresstext.text,
+                      password: _userpasswordtext.text,
+                      phone: _usermobiletext.text);
 
-                  print(getApiData(
-                      'https://hook.integromat.com/oqgjvc2r74ckq6ddx4grvxetfq5fiqm7',
-                      data));
+                  setState(() {
+                    futureuser = registeruser(newuserdata);
+                  });
                 }),
+          ),
+          SizedBox(
+            height: 30,
+            child: FutureBuilder(
+              future: futureuser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data!.toString());
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
+            ),
           )
         ],
       )
@@ -148,28 +172,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Users {
-  final int username;
-  final int id;
+class User {
+  final String username;
+
   final String password;
   final String phone;
   final String address;
 
-  Users({
+  User({
     required this.username,
-    required this.id,
     required this.address,
     required this.password,
     required this.phone,
   });
 
-  factory Users.fromJson(Map<String, dynamic> json) {
-    return Users(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       username: json['username'],
       password: json['password'],
       phone: json['phone'],
       address: json['address'],
-      id: json['id'],
     );
   }
 }
@@ -194,22 +216,21 @@ class Users {
   }
 }
  */
-Future registeruser(String userName, String userPassword, String userMobile,
-    String userAddress) async {
+Future registeruser(User userdata) async {
   var Data = {
-    'name': userName,
-    'password': userPassword,
-    'phone': userMobile,
-    'address': userAddress,
+    'username': userdata.username,
+    'password': userdata.password,
+    'phone': userdata.phone,
+    'address': userdata.address,
   };
 
   var dio = Dio();
   var response = await dio.post(
-    'https://hook.integromat.com/oqgjvc2r74ckq6ddx4grvxetfq5fiqm7',
+    'https://crp-stg.khaledez.net/users/register',
     data: Data,
   );
 
-  print(response.data);
+  return response.data.toString();
 }
 
 Future getApiData(String path, Map<String, dynamic> Data) async {
