@@ -52,9 +52,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var newuserdata =
-      User(username: 'x', address: 'x', password: 'x', phone: 'x');
-  late Future futureuser = registeruser(newuserdata);
+  late Future<String> futureuser = Future<String>.value('Start');
 
   @override
   void initState() {
@@ -216,7 +214,7 @@ class User {
   }
 }
  */
-Future registeruser(User userdata) async {
+Future<String> registeruser(User userdata) async {
   var Data = {
     'username': userdata.username,
     'password': userdata.password,
