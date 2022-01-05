@@ -52,7 +52,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<String> futureuser = Future<String>.value('Start');
+  late Future<String> futureuser = Future<String>.value('');
 
   @override
   void initState() {
